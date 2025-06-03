@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suivi Candidatures</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { font-family: sans-serif; padding: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; }
+    th { background-color: #f2f2f2; }
+    input[type="checkbox"] { transform: scale(1.2); }
+    input[type="date"], select { width: 100%; }
+    select.valid { background-color: #d4edda; }
+    select.pending { background-color: #fff3cd; }
+    select.refused { background-color: #f8d7da; }
+  </style>
+</head>
+<body>
+<h1>Suivi des candidatures</h1>
+<table id="candidatures">
+<thead>
+<tr>
+  <th>Nom</th><th>Adresse</th><th>Téléphone</th><th>Catégorie</th>
+  <th>Poste</th><th>Envoyé</th><th>Date</th><th>Statut</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<script>
+const data = JSON.parse(localStorage.getItem("candidaturesPWA") || "[]");
+const rows = [{'name': 'Geiq BTP', 'address': '16 Rue Victor Hugo, 40000 Mont-de-Marsan', 'phone': '05 58 52 22 42', 'category': 'BTP/Alternance', 'job': 'Aide chantier / Alternant BTP'}, {'name': 'Carrefour Market Mont-de-Marsan', 'address': '19 Boulevard Yves Mainguy, 40000 Mont-de-Marsan', 'phone': 'Non communiqué', 'category': 'Grande distribution', 'job': 'Employé libre-service / Caisse / Réception'}, {'name': 'Action Mont-de-Marsan', 'address': '202 Avenue du Maréchal Juin, 40000 Mont-de-Marsan', 'phone': 'Non communiqué', 'category': 'Grande distribution', 'job': 'Employé libre-service / Caisse / Réception'}, {'name': 'E.Leclerc Mont-de-Marsan', 'address': '1234 Avenue du Vignau Rocade Est, 40006 Mont-de-Marsan', 'phone': '05 58 05 47 00', 'category': 'Grande distribution', 'job': 'Employé libre-service / Caisse / Réception'}, {'name': 'Parera Services', 'address': '525 Rue de la Ferme de Carboue, 40000 Mont-de-Marsan', 'phone': '05 58 75 24 00', 'category': 'Géomatique', 'job': 'Aide relevé terrain / Assistant SIG'}, {'name': 'MDM Informatique', 'address': '1 bis Pl. Raymond Poincaré, 40000 Mont-de-Marsan', 'phone': '05 58 44 36 84', 'category': 'Informatique', 'job': 'Technicien support / Assistant IT'}, {'name': 'MDM Informatique', 'address': '1 bis Place Raymond Poincaré, 40000 Mont-de-Marsan', 'phone': '05 58 44 36 84', 'category': 'Informatique', 'job': 'Technicien support / Assistant IT'}, {'name': 'BUT Mont-de-Marsan', 'address': '1195 Avenue du Maréchal Juin, 40000 Mont-de-Marsan', 'phone': '05 58 51 52 00', 'category': 'Mobilier/Tech', 'job': 'Conseiller en magasin / SAV'}, {'name': 'O’Tacos', 'address': '25 Pl. Joseph Pancaut, 40000 Mont-de-Marsan', 'phone': '05 47 31 58 23', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': "McDonald's Mont-de-Marsan", 'address': '817 Avenue du Maréchal Juin, 40000 Mont-de-Marsan', 'phone': '05 58 05 91 91', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'Domino’s Pizza', 'address': '370 Av. du Maréchal Juin, 40000 Mont-de-Marsan', 'phone': '05 58 03 12 12', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'Subway Mont-de-Marsan', 'address': '1631 Avenue du Maréchal Juin, 40000 Mont-de-Marsan', 'phone': '05 58 75 82 85', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'Del Arte', 'address': '63 Rue Antoine Becquerel, 40280 Saint-Pierre-du-Mont', 'phone': '05 58 45 45 00', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'Courtepaille', 'address': 'Zone du Grand Moun, 40280 Saint-Pierre-du-Mont', 'phone': '05 58 44 04 30', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'Burger King Grand Moun', 'address': '16 Rue Reine Sabate, 40280 Saint-Pierre-du-Mont', 'phone': '05 58 52 59 68', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'La Taverne', 'address': '1930 Av. JFK, 40280 Saint-Pierre-du-Mont', 'phone': '05 58 03 36 83', 'category': 'Restauration', 'job': 'Employé polyvalent / Service / Cuisine'}, {'name': 'SCOPELEC', 'address': '560 Rue du Gal Moinier, 40000 Mont-de-Marsan', 'phone': '05 58 93 30 00', 'category': 'Réseaux', 'job': 'Aide monteur / Technicien réseau débutant'}, {'name': 'AXIONE', 'address': '281 Rue du Gal Moinier, 40000 Mont-de-Marsan', 'phone': '06 62 05 90 70', 'category': 'Réseaux', 'job': 'Aide monteur / Technicien réseau débutant'}, {'name': 'SCOPELEC AQUITAINE', 'address': '560 Rue du Général Moinier, 40000 Mont-de-Marsan', 'phone': '05 58 93 30 00', 'category': 'Réseaux', 'job': 'Aide monteur / Technicien réseau débutant'}];
+const tbody = document.querySelector("tbody");
+
+rows.forEach((row, i) => {
+  const d = data[i] || {};
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${row.name}</td>
+    <td>${row.address}</td>
+    <td>${row.phone}</td>
+    <td>${row.category}</td>
+    <td>${row.job}</td>
+    <td><input type="checkbox" ${d.sent ? 'checked' : ''}></td>
+    <td><input type="date" value="${d.date || ''}"></td>
+    <td>
+      <select>
+        <option value="">—</option>
+        <option value="accepté" ${d.status === "accepté" ? 'selected' : ''}>✅ Accepté</option>
+        <option value="refusé" ${d.status === "refusé" ? 'selected' : ''}>❌ Refusé</option>
+        <option value="attente" ${d.status === "attente" ? 'selected' : ''}>⏳ En attente</option>
+      </select>
+    </td>
+  `;
+  tbody.appendChild(tr);
+});
+document.querySelector("tbody").addEventListener("change", () => {
+  const all = Array.from(document.querySelectorAll("tbody tr")).map(tr => {
+    const inputs = tr.querySelectorAll("input, select");
+    return {
+      sent: inputs[0].checked,
+      date: inputs[1].value,
+      status: inputs[2].value
+    };
+  });
+  localStorage.setItem("candidaturesPWA", JSON.stringify(all));
+});
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
+</body>
+</html>
